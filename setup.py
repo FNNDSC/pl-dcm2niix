@@ -1,22 +1,22 @@
 from setuptools import setup
 
 setup(
-    name             = 'chris-plugin-template',
-    version          = '1.0.0',
-    description      = 'A ChRIS DS plugin template',
-    author           = 'FNNDSC',
-    author_email     = 'dev@babyMRI.org',
-    url              = 'https://github.com/FNNDSC/python-chrisapp-template',
-    py_modules       = ['app'],
-    install_requires = ['chris_plugin'],
-    license          = 'MIT',
-    python_requires  = '>=3.8.2',
-    entry_points     = {
+    name='pl-dcm2niix',
+    version='0.1.0',
+    description='A ChRIS DS plugin wrapper for dcm2niix',
+    author='FNNDSC',
+    author_email='dev@babyMRI.org',
+    url='https://github.com/FNNDSC/pl-dcm2niix',
+    py_modules=['dcm2niixw'],
+    install_requires=['chris_plugin'],
+    license='MIT',
+    python_requires='>=3.10.2',
+    entry_points={
         'console_scripts': [
-            'commandname = app:main'
-            ]
-        },
-    classifiers      = [
+            'dcm2niixw = dcm2niixw:main'
+        ]
+    },
+    classifiers=[
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.10',
         'Topic :: Scientific/Engineering',

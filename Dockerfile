@@ -1,13 +1,30 @@
-# Python version can be changed, e.g.
-# FROM python:3.8
-# FROM docker.io/fnndsc/conda:python3.10.2-cuda11.6.0
-FROM docker.io/python:3.10.2-slim-buster
+# Caution: this Dockerfile is prone to fail on niche bugs,
+# make sure your docker and QEMU binfmt setup are up to date.
+
+
+# compile dcm2niix from source
+FROM alpine:3.15 as builder
+
+RUN apk add build-base git cmake make
+
+WORKDIR /tmp
+ADD https://github.com/rordenlab/dcm2niix/archive/refs/tags/v1.0.20211006.tar.gz /tmp/v1.0.20211006.tar.gz
+RUN tar xf /tmp/v1.0.20211006.tar.gz
+
+RUN mkdir /tmp/dcm2niix-1.0.20211006/build
+WORKDIR /tmp/dcm2niix-1.0.20211006/build
+RUN cmake ..
+RUN make
+
+
+# install Python ChRIS plugin
+FROM docker.io/python:3.10.2-alpine3.15
 
 LABEL org.opencontainers.image.authors="FNNDSC <dev@babyMRI.org>" \
-      org.opencontainers.image.title="ChRIS Plugin Title" \
-      org.opencontainers.image.description="A ChRIS ds plugin that..."
+      org.opencontainers.image.title="pl-dcm2niix" \
+      org.opencontainers.image.description="A ChRIS ds plugin wrapper for dcm2niix"
 
-WORKDIR /usr/local/src/app
+WORKDIR /usr/local/src/pl-dcm2niix
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
@@ -15,4 +32,6 @@ RUN pip install -r requirements.txt
 COPY . .
 RUN pip install .
 
-CMD ["commandname", "--help"]
+COPY --from=builder /tmp/dcm2niix-1.0.20211006/build/bin/dcm2niix /usr/local/bin/dcm2niix
+
+CMD ["dcm2niixw", "--help"]

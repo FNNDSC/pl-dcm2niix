@@ -1,82 +1,37 @@
-# _ChRIS_ ds Plugin Template
+# `pl-dcm2niix` _ChRIS_ Plugin 
 
-<!--
-[![Version](https://img.shields.io/docker/v/fnndsc/pl-appname?sort=semver)](https://hub.docker.com/r/fnndsc/pl-appname)
-[![MIT License](https://img.shields.io/github/license/fnndsc/pl-appname)](https://github.com/FNNDSC/pl-appname/blob/main/LICENSE)
-[![Build](https://github.com/FNNDSC/pl-appname/actions/workflows/ci.yml/badge.svg)](https://github.com/FNNDSC/pl-appname/actions)
--->
+[![Version](https://img.shields.io/docker/v/fnndsc/pl-dcm2niix?sort=semver)](https://hub.docker.com/r/fnndsc/pl-dcm2niix)
+[![MIT License](https://img.shields.io/github/license/fnndsc/pl-dcm2niix)](https://github.com/FNNDSC/pl-dcm2niix/blob/main/LICENSE)
+[![Build](https://github.com/FNNDSC/pl-dcm2niix/actions/workflows/build.yml/badge.svg)](https://github.com/FNNDSC/pl-dcm2niix/actions)
 
+`pl-dcm2niix` is a _ChRIS_ _ds_ plugin wrapper around
+[dcm2niix](https://github.com/rordenlab/dcm2niix).
+It converts an input directory of DICOMs into an output
+directory of NIFTI images.
 
-This is a minimal template repository for _ChRIS_ _ds_ plugin applications.
-For a more comprehensive boilerplate, use
-
-https://github.com/fnndsc/cookiecutter-chrisapp
-
-## How to Use This Template
-
-1. Click "Use this template"
-2. Clone the newly created repository
-3. Replace placeholder text
-
-```shell
-function replace () {
-  find . -type f -not -path '*/\.*/*' -not -path '*/\venv/*' -exec sed -i -e "s/$1/$2/g" '{}' \;
-}
-
-replace commandname my_command_name
-replace pl-appname pl-my-plugin-name
-replace fnndsc my_username
-```
-
-### Template Examples
-
-Here are some good, complete examples of _ChRIS_ plugins created from this template.
-
-- https://github.com/FNNDSC/pl-nums2mask
-- https://github.com/FNNDSC/pl-nii2mnc-u8
-
-Advanced users can `cp -rv .github/workflows` into their own repositories to enable
-automatic builds.
-
-## Abstract
-
-PROGRAMNAME is a [_ChRIS_](https://chrisproject.org/)
-_ds_ plugin which takes in ...  as input files and
-creates ... as output files.
+[![chrisstore.co](https://github.com/FNNDSC/cookiecutter-chrisapp/blob/master/doc/assets/badge/light.png?raw=true)](https://chrisstore.co/plugin/pl-dcm2niix)
 
 ## Usage
 
+`pl-dcm2niix` can run from [_ChRIS_](https://app.chrisproject.org/)
+or locally on the command-line using [Apptainer](https://apptainer.org/).
+
 ```shell
-singularity exec docker://fnndsc/pl-appname commandname [--args values...] input/ output/
+singularity exec docker://fnndsc/pl-dcm2niix dcm2niixw input/ output/
 ```
+
+A subset of the options from the original `dcm2niix` are available.
 
 ## Examples
 
-```shell
-mkdir incoming/ outgoing/
-mv some.dat other.dat incoming/
-singularity exec docker://fnndsc/pl-appname:latest commandname [--args] incoming/ outgoing/
-```
+Example datasets can be obtained from here:
 
-## Development
+https://github.com/DataCurationNetwork/data-primers/blob/master/Neuroimaging%20DICOM%20and%20NIfTI%20Data%20Curation%20Primer/neuroimaging-dicom-and-nifti-data-curation-primer.md#example-datasets
 
-### Building
+To convert DICOMs in `inputdir/` to NIFTIs in `outputdir/`,
+without producing BIDs sidecar JSON (`-b n`), disable automatic
+2D slice merge (`-m n`), compressed `.nii.gz` output (`-z y`):
 
 ```shell
-docker build -t localhost/fnndsc/pl-appname .
-```
-
-### Get JSON Representation
-
-```shell
-docker run --rm localhost/fnndsc/pl-appname chris_plugin_info > MyProgram.json
-```
-
-### Local Test Run
-
-```shell
-docker run --rm -it --userns=host -u $(id -u):$(id -g) \
-    -v $PWD/app.py:/usr/local/lib/python3.10/site-packages/app.py:ro \
-    -v $PWD/in:/incoming:ro -v $PWD/out:/outgoing:rw -w /outgoing \
-    localhost/fnndsc/pl-appname commandname /incoming /outgoing
+singularity exec docker://fnndsc/pl-dcm2niix dcm2niixw -b n -m n -z y inputdir/ outputdir/
 ```
