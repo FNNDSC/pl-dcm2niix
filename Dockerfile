@@ -3,7 +3,7 @@
 
 
 # compile dcm2niix from source
-FROM alpine:3.15 as builder
+FROM alpine:3.16 as builder
 
 RUN apk add build-base git cmake make
 
@@ -18,7 +18,7 @@ RUN make
 
 
 # install Python ChRIS plugin
-FROM docker.io/python:3.10.2-alpine3.15
+FROM docker.io/python:3.10.4-alpine3.16
 
 LABEL org.opencontainers.image.authors="FNNDSC <dev@babyMRI.org>" \
       org.opencontainers.image.title="pl-dcm2niix" \
