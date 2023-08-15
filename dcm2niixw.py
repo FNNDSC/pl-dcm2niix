@@ -44,7 +44,7 @@ parser.add_argument('-z', default='n', choices=('y', 'o', 'i', 'n', '3'),
     parser=parser,
     title='dcm2niix',
     category='MRI Processing',
-    min_memory_limit='100Mi',
+    min_memory_limit='2Gi',
     min_cpu_limit='1000m',
 )
 def main(options: Namespace, inputdir: Path, outputdir: Path):
