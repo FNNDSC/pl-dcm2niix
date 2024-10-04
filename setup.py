@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pl-dcm2niix',
-    version='1.0.0',
+    version='1.0.1',
     description='A ChRIS DS plugin wrapper for dcm2niix',
     author='FNNDSC',
     author_email='dev@babyMRI.org',
