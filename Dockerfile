@@ -8,11 +8,11 @@ FROM alpine:3.16 as builder
 RUN apk add build-base git cmake make
 
 WORKDIR /tmp
-ADD https://github.com/rordenlab/dcm2niix/archive/refs/tags/v1.0.20211006.tar.gz /tmp/v1.0.20211006.tar.gz
-RUN tar xf /tmp/v1.0.20211006.tar.gz
+ADD https://github.com/rordenlab/dcm2niix/archive/refs/tags/v1.0.20241211.tar.gz /tmp/v1.0.20241211.tar.gz
+RUN tar xf /tmp/v1.0.20241211.tar.gz
 
-RUN mkdir /tmp/dcm2niix-1.0.20211006/build
-WORKDIR /tmp/dcm2niix-1.0.20211006/build
+RUN mkdir /tmp/dcm2niix-1.0.20241211/build
+WORKDIR /tmp/dcm2niix-1.0.20241211/build
 RUN cmake ..
 RUN make
 
@@ -32,6 +32,6 @@ RUN pip install -r requirements.txt
 COPY . .
 RUN pip install .
 
-COPY --from=builder /tmp/dcm2niix-1.0.20211006/build/bin/dcm2niix /usr/local/bin/dcm2niix
+COPY --from=builder /tmp/dcm2niix-1.0.20241211/build/bin/dcm2niix /usr/local/bin/dcm2niix
 
 CMD ["dcm2niixw", "--help"]
