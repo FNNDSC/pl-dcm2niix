@@ -92,7 +92,8 @@ jobs:
 
     - name: Upload ChRIS Plugin
       id: upload
-      if: github.ref_type == 'tag'
+      # if: github.ref_type == 'tag'
+      if: false # cube.chrisproject.org is down right now
       uses: FNNDSC/upload-chris-plugin@v1
       with:
         dock_image: ${{ steps.info.outputs.local_tag }}
@@ -102,7 +103,8 @@ jobs:
         compute_names: NERC
 
     - name: Update DockerHub description
-      if: steps.upload.outcome == 'success'
+      # if: steps.upload.outcome == 'success'
+      if: steps.login-dockerhub.outcome == 'success'
       uses: peter-evans/dockerhub-description@1b9a80c056b620d92cedb9d9b5a223409c68ddfa #v5.0.0
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
