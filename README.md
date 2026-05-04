@@ -6,10 +6,9 @@
 
 `pl-dcm2niix` is a _ChRIS_ _ds_ plugin wrapper around
 [dcm2niix](https://github.com/rordenlab/dcm2niix).
-It converts an input directory of DICOMs into an output
-directory of NIFTI images.
-
-[![chrisstore.co](https://github.com/FNNDSC/cookiecutter-chrisapp/blob/master/doc/assets/badge/light.png?raw=true)](https://chrisstore.co/plugin/pl-dcm2niix)
+It converts an input directory of DICOMs into an output directory of NIFTI
+images. Also, [`dcmdjpeg`](https://support.dcmtk.org/docs/dcmdjpeg.html) is
+bundled for convenient handling of JPEG-compressed DICOM files.
 
 ## Usage
 
@@ -17,7 +16,7 @@ directory of NIFTI images.
 or locally on the command-line using [Apptainer](https://apptainer.org/).
 
 ```shell
-singularity exec docker://fnndsc/pl-dcm2niix dcm2niixw input/ output/
+apptainer exec docker://fnndsc/pl-dcm2niix dcm2niixw input/ output/
 ```
 
 A subset of the options from the original `dcm2niix` are available.
@@ -26,12 +25,24 @@ A subset of the options from the original `dcm2niix` are available.
 
 Example datasets can be obtained from here:
 
-https://github.com/DataCurationNetwork/data-primers/blob/master/Neuroimaging%20DICOM%20and%20NIfTI%20Data%20Curation%20Primer/neuroimaging-dicom-and-nifti-data-curation-primer.md#example-datasets
+https://github.com/DataCurationNetwork/data-primers/blob/main/Neuroimaging%20DICOM%20and%20NIfTI%20Data%20Curation%20Primer/neuroimaging-dicom-and-nifti-data-curation-primer.md#example-datasets
 
 To convert DICOMs in `inputdir/` to NIFTIs in `outputdir/`,
 without producing BIDs sidecar JSON (`-b n`), disable automatic
 2D slice merge (`-m n`), compressed `.nii.gz` output (`-z y`):
 
 ```shell
-singularity exec docker://fnndsc/pl-dcm2niix dcm2niixw -b n -m n -z y inputdir/ outputdir/
+apptainer exec docker://fnndsc/pl-dcm2niix dcm2niixw -b n -m n -z y inputdir/ outputdir/
 ```
+
+Pre-process all `*.dcm` files using `dcmdjpeg` before running `dcm2niix`:
+
+```shell
+apptainer exec docker://fnndsc/pl-dcm2niix dcm2niixw --dcmdjpeg inputdir/ outputdir/
+```
+
+> [!TIP]
+> The command `dcmdjpeg` is a no-op on already decoded files, i.e. it's okay to
+> use `dcmdjpeg` when `inputdir/` contains a mix of JPEG-compressed and
+> ordinary DICOM files.
+
